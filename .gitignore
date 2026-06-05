@@ -1,5 +1,5 @@
 .vscode
-kraken_venv/
+krakenvenv
 commands.db
 docker-compose.yaml
 .env
