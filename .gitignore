@@ -2,3 +2,6 @@
 krakenvenv
 commands.db
 .env
+logs/
+__pycache__
+dags/__pycache__

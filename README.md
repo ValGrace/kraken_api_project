@@ -19,3 +19,14 @@ Initialize the database and create admin user
 docker compose up airflow-init
 ```
 
+start the container services
+```bash
+docker compose up
+```
+
+Open the Airflow UI through `http://localhost:8080`
+Use the credentials:-
+Username: airflow
+Password: airflow
+
+
