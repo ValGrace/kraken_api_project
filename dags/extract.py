@@ -5,8 +5,9 @@ from sqlalchemy import create_engine
 import pandas as pd
 import logging
 import json
+from datetime import timedelta
 
-@asset(schedule="@daily")
+@asset(schedule=timedelta(minutes=2))
 def extractasset(context):
     response = request_sect(
         method="GET",

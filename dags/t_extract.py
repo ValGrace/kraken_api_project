@@ -1,10 +1,11 @@
 from airflow.sdk import asset
 from krakrequests import request_sect
 from sqlalchemy import create_engine
+from datetime import timedelta
 import json
 import pandas as pd
 
-@asset(schedule="@daily")
+@asset(schedule=timedelta(minutes=5))
 def extract_recent_trades():
     response = request_sect(
         method="GET",
@@ -37,7 +38,7 @@ def extract_recent_trades():
     df_recent_trades.to_sql("recent_trades", con=engine, if_exists='append', index=False)
     return recent_trades
     
-@asset(schedule="@daily")
+@asset(schedule=timedelta(minutes=2))
 def extract_ohlc_data():
     response = request_sect(
         method="GET",
@@ -71,7 +72,7 @@ def extract_ohlc_data():
     df_ohlc_sticks.to_sql("ohlc_sticks", con=engine, if_exists='append', index=False)
     return ohlc_sticks
 
-@asset(schedule="@daily")
+@asset(schedule=timedelta(minutes=2))
 def extract_market_depth():
     response = request_sect(
         method="GET",

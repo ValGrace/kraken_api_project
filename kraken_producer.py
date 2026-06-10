@@ -1,17 +1,20 @@
-from kafka import KafkaProducer
+from kafka import KafkaConsumer
 import json
 import pandas as pd
 from sqlalchemy import create_engine
 
 conn_string = "postgresql://airflow:airflow@postgres/airflow"
 engine = create_engine(conn_string)
+def kraken_consumer():
+    kraken_trades_consumer = KafkaConsumer(
+        'krakentrades',
+        bootstrap_servers='broker:9092',
+        enable_auto_commit=True,
+        auto_offset_reset='earliest',
+        value_deserializer=lambda v: json.loads(m.decode('utf-8'))
+    )
 
-kraken_producer = KafkaProducer(
-    bootstrap_servers='broker:9092',
-    api_version=(2, 3, 1),
-    value_serializer=lambda v: json.dumps(v).encode('utf-8')
-)
 
-topic_name = 'kraken_trades_topic'
+
 
 
