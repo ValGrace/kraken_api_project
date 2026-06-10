@@ -5,3 +5,4 @@ commands.db
 logs/
 __pycache__
 dags/__pycache__
+config/
