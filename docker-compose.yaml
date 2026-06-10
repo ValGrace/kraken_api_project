@@ -105,6 +105,7 @@ services:
           action: rebuild
   postgres:
     image: postgres:16
+    container_name: kraken_postgres
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
