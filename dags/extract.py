@@ -7,8 +7,8 @@ import logging
 import json
 from datetime import timedelta
 
-@asset(schedule=timedelta(minutes=2))
-def extractasset(context):
+@asset(schedule=timedelta(minutes=5))
+def extractasset():
     response = request_sect(
         method="GET",
         path="/0/public/AssetPairs",
@@ -31,15 +31,15 @@ def extractasset(context):
             "leverage_buy": data.get("leverage_buy", []),
             "leverage_sell": data.get("leverage_sell", [])
         })
-    pairs = context["ti"].xcom_push(key="new_asset_value", value=asset_pairs)
+    
     engine = create_engine("postgresql://airflow:airflow@postgres/airflow")
-    _df = pd.DataFrame(pairs)
+    _df = pd.DataFrame(asset_pairs)
     _df.to_sql("assetpairs", con=engine, if_exists='append', index=False)
-    return pairs
+    return asset_pairs
 
 @asset(schedule=extractasset)
 def access_assetpairs(context):
-    pairs = context['task_instance'].xcom_pull(dag_id="extractassets",key="new_asset_value", task_ids="extractassets")
+    pairs = context['task_instance'].xcom_pull(dag_id="extractassets",key="return_value", task_ids="extractassets")
     
     print("pairs: ", pairs)
     print(context["task_instance"].xcom_pull(dag_id="extractassets"))

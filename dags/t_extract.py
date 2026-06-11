@@ -38,7 +38,7 @@ def extract_recent_trades():
     df_recent_trades.to_sql("recent_trades", con=engine, if_exists='append', index=False)
     return recent_trades
     
-@asset(schedule=timedelta(minutes=2))
+@asset(schedule=timedelta(minutes=5))
 def extract_ohlc_data():
     response = request_sect(
         method="GET",
@@ -72,7 +72,7 @@ def extract_ohlc_data():
     df_ohlc_sticks.to_sql("ohlc_sticks", con=engine, if_exists='append', index=False)
     return ohlc_sticks
 
-@asset(schedule=timedelta(minutes=2))
+@asset(schedule=timedelta(minutes=5))
 def extract_market_depth():
     response = request_sect(
         method="GET",

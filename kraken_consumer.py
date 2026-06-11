@@ -1,18 +1,21 @@
 from kafka import KafkaConsumer
-import json
+from pyspark.sql import SparkSession
 import pandas as pd
-from sqlalchemy import create_engine
 
-conn_string = "postgresql://airflow:airflow@postgres/airflow"
-engine = create_engine(conn_string)
-def kraken_consumer():
-    kraken_trades_consumer = KafkaConsumer(
-        'krakentrades',
-        bootstrap_servers='broker:9092',
-        enable_auto_commit=True,
-        auto_offset_reset='earliest',
-        value_deserializer=lambda v: json.loads(m.decode('utf-8'))
-    )
+global spark 
+
+spark = SparkSession.builder.appName("Process topic data in spark").getOrCreate()
+
+def spark_consumer():
+    df = spark\
+        .readStream\
+        .format("kafka")\
+        .option("kafka.bootstrap.servers", "broker:9092")\
+        .option("subscribe", "krakentopic.public.assetpairs")\
+        .load()
+
+
+
 
 
 
