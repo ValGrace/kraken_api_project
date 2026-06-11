@@ -1,0 +1,8 @@
+.vscode
+commands.db
+
+krakenvenv
+
+.gitignore
+
+.env

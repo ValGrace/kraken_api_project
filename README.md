@@ -26,7 +26,12 @@ docker compose up
 
 Open the Airflow UI through `http://localhost:8080`
 Use the credentials:-
-Username: airflow
-Password: airflow
+`Username: airflow`
+`Password: airflow`
+
+Execute postgres source connector configuration
+```bash
+chmod +x debezium_pg_connector.sh
+```
 
 
