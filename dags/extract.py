@@ -29,7 +29,12 @@ def extractasset():
             "lot": data.get("lot"),
             "cost_decimals": data.get("cost_decimals"),
             "leverage_buy": data.get("leverage_buy", []),
-            "leverage_sell": data.get("leverage_sell", [])
+            "leverage_sell": data.get("leverage_sell", []),
+            "fees": data.get("fees", []),
+            "ordermin": data.get("ordermin", ""),
+            "tick_size": data.get("tick_size", ""),
+            "long_position_limit": data.get("long_position_limit", 0),
+            "short_position_limit": data.get("short_position_limit", 0)
         })
     
     engine = create_engine("postgresql://airflow:airflow@postgres/airflow")
