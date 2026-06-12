@@ -72,7 +72,7 @@ def extract_ohlc_data():
     df_ohlc_sticks.to_sql("ohlc_sticks", con=engine, if_exists='append', index=False)
     return ohlc_sticks
 
-@asset(schedule=timedelta(minutes=5))
+@asset(schedule=timedelta(seconds=5))
 def extract_market_depth():
     response = request_sect(
         method="GET",

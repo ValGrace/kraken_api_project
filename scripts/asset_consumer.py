@@ -14,7 +14,9 @@ def ap_consumer():
             StructField('leverage_sell', StringType(), False),
             StructField('fees', StringType(), False),
             StructField('ordermin', DoubleType(), False),
-            StructField('tick_size', DoubleType(), False)
+            StructField('tick_size', DoubleType(), False),
+            StructField("long_position_limit", IntType, False),
+            StructField("short_position_limit", IntType, False)
         ])
     
     json_assetsdf = assets_df.selectExpr("CAST(value AS STRING)") \
@@ -30,13 +32,26 @@ def ap_consumer():
         col(f"{dpa}.cost_decimals").alias("cost_decimals"),
         col(f"{dpa}.leverage_buy").alias("leverage_buy"),
         col(f"{dpa}.leverage_sell").alias("leverage_sell"),
-        col(f"{dpa}.fees").alias("fees")
+        col(f"{dpa}.fees").alias("fees"),
+        col(f"{dpa}.ordermin").alias("ordermin"),
+        col(f"{dpa}.tick_size").alias("tick_size"),
+        col(f"{dpa}.short_position_limit").alias("short_position_limit"),
+        col(f"{dpa}.long_position_limit").alias("long_position_limit")
     )
 
     extracted_asset.printSchema()
 
     assets_stats_df = extracted_asset.agg(
         count("altname").alias("total_assets"),
-        spark_max("cost_decimals").alias("max_costs")
+        spark_max("cost_decimals").alias("max_costs"),
+        spark_max("tick_size").alias("max_tick_size"),
+        spark_max("short_position_limit").alias("max_short_position"),
+        spark_max("long_position_limit").alias("max_long_position")
     )
+
+    extracted_asset.write\
+        .format("org.apache.spark.sql.cassandra")\
+        .mode('append')\
+        .options(table="assetpairs", keyspace="krakentrades")\
+        .save()
 
