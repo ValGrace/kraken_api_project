@@ -1,3 +1,7 @@
+### Kraken Real time streaming architecture
+![Architecture]("https://github.com/ValGrace/kraken_api_project/blob/main/assets/rtal.png")
+
+
 Create a virtual environment
 
 ```bash
@@ -32,6 +36,9 @@ Use the credentials:-
 Execute postgres source connector configuration
 ```bash
 chmod +x debezium_pg_connector.sh
+
+bash debezium_pg_connector.sh
 ```
 
+Run
 
