@@ -4,7 +4,12 @@ import pandas as pd
 
 global spark 
 
-spark = SparkSession.builder.appName("Process topic data in spark").getOrCreate()
+spark = SparkSession.builder\
+    .appName("Process topic data streams in spark")\
+    .config('spark.cassandra.connection.host', 'cassdb')\
+    .config('spark.cassandra.connection.port', '9042')\
+    .config('spark.cassandra.output.consistency.level', 'ONE')\
+    .getOrCreate()
 
 spark.sparkContext.setLogLevel("ERROR")
 

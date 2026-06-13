@@ -8,5 +8,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "print(1)"]
+CMD ["python", "-c", "main.py"]
 

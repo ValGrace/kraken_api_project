@@ -1,8 +1,8 @@
 from pyspark.sql.types import StructType, StructField, StringType, IntType, DoubleType, TimestampType
-from pyspark.sql.functions import from_json, col, spark_max, count, sum
+from pyspark.sql.functions import from_json, col, spark_max, sum
 from spark_consumer import spark_consumer
 
-def rt_consumer():
+def ohlc_consumer():
     ohlc_df = spark_consumer("krakentopic.public.ohlc_sticks")
 
     ohlc_schema = StructType([
