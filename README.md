@@ -1,5 +1,5 @@
 ### Kraken Real time streaming architecture
-![Architecture]("https://github.com/ValGrace/kraken_api_project/blob/main/assets/rtal.png")
+![Architecture](https://github.com/ValGrace/kraken_api_project/blob/main/assets/rtal.png)
 
 
 Create a virtual environment
