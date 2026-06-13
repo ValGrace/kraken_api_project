@@ -64,10 +64,8 @@ services:
     image: debezium/connect:2.7.3.Final
     container_name: debez_container
     depends_on:
-      broker:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
+      - broker
+      - postgres
     ports:
       - "8083:8083"
     environment:

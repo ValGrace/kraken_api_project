@@ -1,7 +1,16 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntType, MapType
 import pandas as pd
+from cassandra.cluster import Cluster
 
+
+cluster = Cluster(['cassdb'], port=9042)
+
+session = cluster.connect()
+
+session.execute("CREATE KEYSPACE IF NOT EXISTS krakentrades WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3}")
+
+session.set_keyspace('krakentrades')
 global spark 
 
 spark = SparkSession.builder\
