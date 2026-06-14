@@ -37,7 +37,7 @@ def bin_candles():
             "low": float(low),
             "close": float(close),
             "volume": float(volume),
-            "close_time": float(close_time),
+            "close_time": close_time,
             "quote_volume": float(quote_volume),
             "trades": trades,
             "taker_base": float(taker_base),
