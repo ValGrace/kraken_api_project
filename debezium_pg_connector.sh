@@ -17,7 +17,7 @@ curl -i -X PUT -H "Accept:application/json" -H "Content-Type:application/json" l
     "database.dbname": "airflow",
     "topic.prefix": "krakentopic",
     "schema.include.list": "public",
-    "table.include.list": "public.assetpairs,public.market_depth,public.ohlc_sticks,public.recent_trades"
+    "table.include.list": "public.assetpairs,public.market_depth,public.ohlc_sticks,public.recent_trades, public.bin_candles"
     
 }'
 
