@@ -1,6 +1,6 @@
-from pyspark.sql.types import StructType, StructField, StringType, IntType, DoubleType, TimestampType
-from pyspark.sql.functions import from_json, col, spark_max, sum
-from spark_consumer import spark_consumer
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
+import pyspark.sql.functions as sf
+from scripts.spark_consumer import spark_consumer
 
 def ohlc_consumer():
     ohlc_df = spark_consumer("krakentopic.public.ohlc_sticks")
@@ -13,30 +13,30 @@ def ohlc_consumer():
         StructField("btc_asks_close", StringType(), False),
         StructField("btc_asks_vwap", StringType(), False),
         StructField("btc_asks_volume", StringType(), False),
-        StructField("btc_asks_trades", IntType(), False)
+        StructField("btc_asks_trades", IntegerType(), False)
     ])
 
     json_ohlcdf = ohlc_df.selectExpr("CAST(value AS STRING)") \
-        .select(from_json(col("value"), ohlc_schema).alias("data"))
+        .select(sf.from_json(sf.col("value"), ohlc_schema).alias("data"))
     
     dpa = "data.payload.after"
     
     ohlc_df = json_ohlcdf.select(
-        col(f"{dpa}.btc_asks_ts").alias("timestamp"),
-        col(f"{dpa}.btc_asks_open").alias("open").cast("double"),
-        col(f"{dpa}.btc_asks_high").alias("high").cast("double"),
-        col(f"{dpa}.btc_asks_low").alias("low").cast("double"),
-        col(f"{dpa}.btc_asks_vwap").alias("vwap").cast("double"),
-        col(f"{dpa}.btc_asks_volume").alias("volume").cast("double"),
-        col(f"{dpa}.btc_asks_trades").alias("trades")
+        sf.col(f"{dpa}.btc_asks_ts").alias("timestamp"),
+        sf.col(f"{dpa}.btc_asks_open").alias("open").cast("double"),
+        sf.col(f"{dpa}.btc_asks_high").alias("high").cast("double"),
+        sf.col(f"{dpa}.btc_asks_low").alias("low").cast("double"),
+        sf.col(f"{dpa}.btc_asks_vwap").alias("vwap").cast("double"),
+        sf.col(f"{dpa}.btc_asks_volume").alias("volume").cast("double"),
+        sf.col(f"{dpa}.btc_asks_trades").alias("trades")
     )
 
     ohlc_df.printSchema()
 
     assets_stats_df = ohlc_df.agg(
-        sum("trades").alias("total_trades"),
-        spark_max("trades").alias("max_trades"),
-        spark_max("price").alias("max_price"),
+        sf.sum("trades").alias("total_trades"),
+        sf.max("trades").alias("max_trades"),
+        sf.max("price").alias("max_price"),
     )
 
     ohlc_df.write\

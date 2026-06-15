@@ -1,4 +1,4 @@
-from krakenrequests import request_sect
+from krakrequests import request_sect
 from airflow.sdk import asset
 from datetime import timedelta
 import json
@@ -15,7 +15,7 @@ def bin_candles():
             "interval":"1h",
             "limit":60
         },
-        environment="api.binance.com"
+        environment="https://api.binance.com"
     )
 
     data = res.read().decode()

@@ -1,6 +1,6 @@
-from pyspark.sql.types import StructType, StructField, StringType, IntType, DoubleType, TimestampType
-from pyspark.sql.functions import from_json, col, spark_max, count
-from spark_consumer import spark_consumer
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
+import pyspark.sql.functions as sf
+from scripts.spark_consumer import spark_consumer
 
 def rt_consumer():
     trades_df = spark_consumer("krakentopic.public.recent_trades")
@@ -12,30 +12,30 @@ def rt_consumer():
         StructField("side", StringType(), False),
         StructField("order", StringType(), False),
         StructField("misc", StringType(), False),
-        StructField("trade_id", IntType(), False)
+        StructField("trade_id", IntegerType(), False)
     ])
 
     json_tradesdf = trades_df.selectExpr("CAST(value AS STRING)") \
-        .select(from_json(col("value"), trades_schema).alias("data"))
+        .select(sf.from_json(sf.col("value"), trades_schema).alias("data"))
     
     dpa = "data.payload.after"
     
     recent_trades_df = json_tradesdf.select(
-        col(f"{dpa}.price").alias("price").cast("double"),
-        col(f"{dpa}.ask_volume").alias("ask_volume").cast("doubles"),
-        col(f"{dpa}.timestamp").alias("timestamp"),
-        col(f"{dpa}.side").alias("side"),
-        col(f"{dpa}.order").alias("order"),
-        col(f"{dpa}.misc").alias("misc"),
-        col(f"{dpa}.trade_id").alias("trade_id").cast("integer")
+        sf.col(f"{dpa}.price").alias("price").cast("double"),
+        sf.col(f"{dpa}.ask_volume").alias("ask_volume").cast("doubles"),
+        sf.col(f"{dpa}.timestamp").alias("timestamp"),
+        sf.col(f"{dpa}.side").alias("side"),
+        sf.col(f"{dpa}.order").alias("order"),
+        sf.col(f"{dpa}.misc").alias("misc"),
+        sf.col(f"{dpa}.trade_id").alias("trade_id").cast("integer")
     )
 
     recent_trades_df.printSchema()
 
     assets_stats_df = recent_trades_df.agg(
-        count("trade_id").alias("total_trades"),
-        spark_max("ask_volume").alias("max_ask_volume"),
-        spark_max("price").alias("max_price"),
+        sf.count("trade_id").alias("total_trades"),
+        sf.max("ask_volume").alias("max_ask_volume"),
+        sf.max("price").alias("max_price"),
     )
 
     recent_trades_df.write\

@@ -1,30 +1,35 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, IntType, MapType
-import pandas as pd
 from cassandra.cluster import Cluster
-
-
-cluster = Cluster(['cassdb'], port=9042)
-
-session = cluster.connect()
-
-session.execute("CREATE KEYSPACE IF NOT EXISTS krakenstats WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3}")
-
-session.execute("CREATE KEYSPACE IF NOT EXISTS krakentrades WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3}")
-
-session.set_keyspace('krakentrades')
 global spark 
 
-spark = SparkSession.builder\
-    .appName("Process topic data streams in spark")\
-    .config('spark.cassandra.connection.host', 'cassdb')\
-    .config('spark.cassandra.connection.port', '9042')\
-    .config('spark.cassandra.output.consistency.level', 'ONE')\
-    .getOrCreate()
+def create_cluster():
+    try:
+        cluster = Cluster(['cassdb'], port=9042)
 
-spark.sparkContext.setLogLevel("ERROR")
+        session = cluster.connect()
 
-def spark_consumer(topic_name):
+        session.execute("CREATE KEYSPACE IF NOT EXISTS krakenstats WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3}")
+
+        session.execute("CREATE KEYSPACE IF NOT EXISTS krakentrades WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3}")
+
+        session.set_keyspace('krakentrades')
+
+    except Exception as e:
+        print(f"could not create cluster or keyspace: {e}")
+
+    
+
+
+def spark_consumer(topic_name):    
+
+    spark = SparkSession.builder\
+        .appName("Process topic data streams in spark")\
+        .config('spark.cassandra.connection.host', 'cassdb')\
+        .config('spark.cassandra.connection.port', '9042')\
+        .config('spark.cassandra.output.consistency.level', 'ONE')\
+        .getOrCreate()
+
+    spark.sparkContext.setLogLevel("ERROR")
     df = spark\
         .readStream\
         .format("kafka")\
