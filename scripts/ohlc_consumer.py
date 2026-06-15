@@ -22,7 +22,7 @@ def ohlc_consumer():
     dpa = "data.payload.after"
     
     ohlc_df = json_ohlcdf.select(
-        sf.col(f"{dpa}.btc_asks_ts").alias("timestamp"),
+        sf.col(f"{dpa}.btc_asks_ts").alias("ask_ts"),
         sf.col(f"{dpa}.btc_asks_open").alias("open").cast("double"),
         sf.col(f"{dpa}.btc_asks_high").alias("high").cast("double"),
         sf.col(f"{dpa}.btc_asks_low").alias("low").cast("double"),

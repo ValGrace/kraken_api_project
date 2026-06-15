@@ -37,11 +37,11 @@ def bin_consumer():
     dpa = "data.payload.after"
     
     candles_df = json_tradesdf.select(
-        sf.col(f"{dpa}.timestamp").alias("timestamp"),
+        sf.col(f"{dpa}.timestamp").alias("binance_ts"),
         sf.col(f"{dpa}.open_p").alias("open_price"),
         sf.col(f"{dpa}.high").alias("high"),
         sf.col(f"{dpa}.low").alias("low"),
-        sf.col(f"{dpa}.volume").alias("ask_volume").cast("doubles"),
+        sf.col(f"{dpa}.volume").alias("ask_volume").cast("double"),
         sf.col(f"{dpa}.close_time").alias("close_time"),
         sf.col(f"{dpa}.quote_volume").alias("quote_volume"),
         sf.col(f"{dpa}.trades").alias("trades"),

@@ -22,8 +22,8 @@ def rt_consumer():
     
     recent_trades_df = json_tradesdf.select(
         sf.col(f"{dpa}.price").alias("price").cast("double"),
-        sf.col(f"{dpa}.ask_volume").alias("ask_volume").cast("doubles"),
-        sf.col(f"{dpa}.timestamp").alias("timestamp"),
+        sf.col(f"{dpa}.ask_volume").alias("ask_volume").cast("double"),
+        sf.col(f"{dpa}.timestamp").alias("trades_ts"),
         sf.col(f"{dpa}.side").alias("side"),
         sf.col(f"{dpa}.order").alias("order"),
         sf.col(f"{dpa}.misc").alias("misc"),
