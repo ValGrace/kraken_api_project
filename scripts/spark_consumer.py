@@ -8,6 +8,8 @@ cluster = Cluster(['cassdb'], port=9042)
 
 session = cluster.connect()
 
+session.execute("CREATE KEYSPACE IF NOT EXISTS krakenstats WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3}")
+
 session.execute("CREATE KEYSPACE IF NOT EXISTS krakentrades WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3}")
 
 session.set_keyspace('krakentrades')
