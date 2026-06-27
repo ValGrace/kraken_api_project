@@ -10,7 +10,7 @@ python -m venv krakenvenv
 
 Install required packages
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 Make the shell script executable
