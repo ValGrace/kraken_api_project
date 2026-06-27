@@ -13,5 +13,5 @@ def main():
     bin_consumer()
     create_cluster()
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
